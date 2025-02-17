@@ -1,0 +1,61 @@
+---
+name: CI
+
+'on':
+   workflow_call:
+    inputs:
+      lint_path:
+        description: "The root path where the linters should evaluate"
+        required: false
+        default: "."
+        type: string
+      extra_molecule_args:
+        description: "Extra user provided args for molecule"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install test dependencies.
+        run: pip3 install yamllint ansible-lint
+
+      - name: Lint code.
+        run: |
+          yamllint ${{ inputs.lint_path }}
+          ansible-lint ${{ inputs.lint_path }}
+
+  molecule:
+    name: Molecule
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install test dependencies.
+        run: pip3 install ansible molecule molecule-plugins[docker] docker
+
+      - name: Run Molecule tests.
+        run: molecule test ${{ inputs.extra_molecule_args }}
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
