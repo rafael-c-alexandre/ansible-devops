@@ -1,24 +1,46 @@
-GitHub Action Templates for Ansible Roles
-=========================================
+GitHub Action Templates for Ansible
+====================================
 
-This repository contains reusable GitHub Action templates to automate the CI process and release Ansible roles to Ansible Galaxy.
+This repository contains reusable GitHub Action templates to automate the CI/CD process of Ansible playbooks and roles.
 
 Workflows
 ---------
 
-### 1. CI Workflow (`ci.yml`)
+### 1. Lint Workflow (`lint.yml`)
 
-The **CI workflow** runs linting checks and Molecule tests to ensure the role meets best practices.
+The **Lint workflow** runs linting checks to ensure the role meets best practices.
 
 #### **Inputs**
 | Name                | Description                                     | Required | Default |
 |---------------------|-------------------------------------------------|----------|---------|
 | `lint_path`        | The root path where the linters should evaluate | ❌       | `"."`   |
-| `extra_molecule_args` | Extra user-provided arguments for Molecule   | ❌       | `""`    |
 
 #### **Jobs**
 
 - **Lint**: Runs `yamllint` and `ansible-lint` on the role.
+
+#### **Usage**
+
+To use this workflow in another repository:
+```yaml
+jobs:
+  test:
+    uses: owner/repository/.github/workflows/lint.yml@main
+    with:
+      lint_path: "."
+```
+
+### 2. Molecule Workflow (`molecule.yml`)
+
+The **Molecule workflow** runs Molecule tests to ensure the role meets best practices.
+
+#### **Inputs**
+| Name                | Description                                     | Required | Default |
+|---------------------|-------------------------------------------------|----------|---------|
+| `extra_molecule_args` | Extra user-provided arguments for Molecule   | ❌       | `""`    |
+
+#### **Jobs**
+
 - **Molecule**: Runs [Molecule](https://ansible.readthedocs.io/projects/molecule/) tests (Docker-based).
 
 #### **Usage**
@@ -27,14 +49,12 @@ To use this workflow in another repository:
 ```yaml
 jobs:
   test:
-    uses: owner/repository/.github/workflows/ci.yml@main
+    uses: owner/repository/.github/workflows/molecule.yml@main
     with:
-      lint_path: "."
       extra_molecule_args: "--scenario-name default"
 ```
 
-
-### 2. Release Workflow (`release.yml`)
+### 3. Release Workflow (`release.yml`)
 
 The **Release workflow** publishes the role to Ansible Galaxy.
 
