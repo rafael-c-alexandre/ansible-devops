@@ -7,6 +7,9 @@ inputs:
   ssh_private_key_path:
     description: "SSH private key path (relative to the project root)"
     required: true
+  ssh_public_key_path:
+    description: "SSH public key path (relative to the project root)"
+    required: true
 
 runs:
   using: "composite"
@@ -27,10 +30,12 @@ runs:
       run: |
         mkdir -p ~/.ssh
         cat "${{ inputs.ssh_private_key_path }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+        cat "${{ inputs.ssh_public_key_path }}" > ~/.ssh/authorized_keys
+        chmod 600 ~/.ssh/id_rsa ~/.ssh/authorized_keys
       shell: bash
 
     - name: Test SSH connection (optional)
       run: |
-        ssh -o StrictHostKeyChecking=no root@localhost "echo 'SSH works!'"
+        # 'runner' is the default github actions user.
+        ssh -o StrictHostKeyChecking=no runner@localhost "echo 'SSH works!'"
       shell: bash
