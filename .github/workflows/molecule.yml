@@ -1,8 +1,8 @@
 ---
-name: CI
+name: Molecule
 
 'on':
-   workflow_call:
+  workflow_call:
     inputs:
       extra_molecule_args:
         description: "Extra user provided args for molecule"

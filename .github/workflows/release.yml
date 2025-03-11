@@ -2,7 +2,7 @@
 name: Release
 
 'on':
-   workflow_call:
+  workflow_call:
     secrets:
       GALAXY_PAT:
         required: true

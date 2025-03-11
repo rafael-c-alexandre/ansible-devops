@@ -1,8 +1,8 @@
 ---
-name: CI
+name: Lint
 
 'on':
-   workflow_call:
+  workflow_call:
     inputs:
       lint_path:
         description: "The root path where the linters should evaluate"
