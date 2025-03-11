@@ -1,0 +1,44 @@
+---
+name: "Run playbook test"
+description: "Runs playbook and idempotence check"
+author: "Rafael Alexandre"
+
+inputs:
+  playbook_path:
+    description: "Playbook path (relative to the project root)"
+    required: true
+    type: string
+  ansible_cfg_path:
+    description: "Ansible.cfg path (relative to the project root)"
+    required: true
+    type: string
+  inventory_path:
+    description: "Inventory path (relative to the project root)"
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up the test environment.
+      run: |
+        cp ${{ inputs.ansible_cfg_path }} ./ansible.cfg
+        cp ${{ inputs.inventory_path }} ./inventory
+
+    - name: Test the playbook's syntax.
+      run: |
+        ansible-playbook ${{ inputs.playbook_path }} --syntax-check
+
+    - name: Test the playbook.
+      run: ansible-playbook ${{ inputs.playbook_path }}
+      env:
+        ANSIBLE_FORCE_COLOR: '1'
+
+    - name: Idempotence check.
+      run: |
+        idempotence=$(mktemp)
+        ansible-playbook ${{ inputs.playbook_path }} | tee -a ${idempotence}
+        tail ${idempotence} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+        rm -rf ${idempotence}
+      env:
+        ANSIBLE_FORCE_COLOR: '1'
