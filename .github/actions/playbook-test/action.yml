@@ -13,6 +13,9 @@ inputs:
   inventory_path:
     description: "Inventory path (relative to the project root)"
     required: true
+  config_path:
+    description: "Config.yml path (relative to the project root)"
+    required: true
 
 runs:
   using: "composite"
@@ -21,6 +24,7 @@ runs:
       run: |
         cp ${{ inputs.ansible_cfg_path }} ./ansible.cfg
         cp ${{ inputs.inventory_path }} ./inventory
+        cp ${{ inputs.config_path }} ./default.config.yml
       shell: bash
 
     - name: Test the playbook's syntax.
