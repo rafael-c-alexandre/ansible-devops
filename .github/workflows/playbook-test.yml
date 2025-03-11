@@ -8,11 +8,17 @@ name: Playbook-test
         description: "Playbook path (relative to the project root)"
         required: true
         type: string
+      run_host_os:
+        description: "Host OS to run the github action on"
+        required: true
+        default: "ubuntu-latest"
+        type: string
 
 jobs:
 
   playbook-test:
     name: Playbook-test
+    runs-on: ${{ inputs.run_host_os }}
 
     steps:
       - name: Check out the codebase.
