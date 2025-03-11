@@ -7,15 +7,12 @@ inputs:
   playbook_path:
     description: "Playbook path (relative to the project root)"
     required: true
-    type: string
   ansible_cfg_path:
     description: "Ansible.cfg path (relative to the project root)"
     required: true
-    type: string
   inventory_path:
     description: "Inventory path (relative to the project root)"
     required: true
-    type: string
 
 runs:
   using: "composite"
@@ -24,13 +21,16 @@ runs:
       run: |
         cp ${{ inputs.ansible_cfg_path }} ./ansible.cfg
         cp ${{ inputs.inventory_path }} ./inventory
+      shell: bash
 
     - name: Test the playbook's syntax.
       run: |
         ansible-playbook ${{ inputs.playbook_path }} --syntax-check
+      shell: bash
 
     - name: Test the playbook.
       run: ansible-playbook ${{ inputs.playbook_path }}
+      shell: bash
       env:
         ANSIBLE_FORCE_COLOR: '1'
 
@@ -40,5 +40,6 @@ runs:
         ansible-playbook ${{ inputs.playbook_path }} | tee -a ${idempotence}
         tail ${idempotence} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
         rm -rf ${idempotence}
+      shell: bash
       env:
         ANSIBLE_FORCE_COLOR: '1'

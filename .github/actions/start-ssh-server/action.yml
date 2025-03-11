@@ -7,28 +7,30 @@ inputs:
   ssh_private_key_path:
     description: "SSH private key path (relative to the project root)"
     required: true
-    type: string
 
 runs:
   using: "composite"
   steps:
-
     - name: Install OpenSSH
       run: |
         sudo apt-get update
         sudo apt-get install -y openssh-server
+      shell: bash
 
     - name: Start SSH server
       run: |
         sudo service ssh start
         sudo ssh-keygen -A
+      shell: bash
 
     - name: Add SSH keys (optional)
       run: |
         mkdir -p ~/.ssh
         cat "${{ inputs.ssh_private_key_path }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
+      shell: bash
 
     - name: Test SSH connection (optional)
       run: |
         ssh -o StrictHostKeyChecking=no root@localhost "echo 'SSH works!'"
+      shell: bash
