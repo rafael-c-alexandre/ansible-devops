@@ -29,6 +29,6 @@ jobs:
 
       - name: Lint code.
         run: |
-          ansible-galaxy collection install community.docker
-          yamllint .
+          ansible-galaxy collection install community.docker  # FIX ME
+          yamllint .    # FIX ME
           ansible-lint ${{ inputs.lint_path }}

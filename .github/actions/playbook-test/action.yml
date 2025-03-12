@@ -24,7 +24,7 @@ runs:
       run: |
         cp ${{ inputs.ansible_cfg_path }} ./ansible.cfg
         cp ${{ inputs.inventory_path }} ./inventory
-        cp ${{ inputs.config_path }} ./default.config.yml
+        cp ${{ inputs.config_path }} ./default.config.yml # FIX ME
       shell: bash
 
     - name: Test the playbook's syntax.
