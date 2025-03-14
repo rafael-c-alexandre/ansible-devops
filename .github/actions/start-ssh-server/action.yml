@@ -36,6 +36,6 @@ runs:
 
     - name: Test SSH connection (optional)
       run: |
-        # 'runner' is the default github actions user.
+        # 'runner' is the default github actions user in ubuntu.
         ssh -o StrictHostKeyChecking=no runner@localhost -i ~/.ssh/id_rsa "echo 'SSH works!'"
       shell: bash
