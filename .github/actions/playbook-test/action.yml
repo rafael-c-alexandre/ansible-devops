@@ -16,6 +16,10 @@ inputs:
   config_path:
     description: "Config.yml path (relative to the project root)"
     required: true
+  run_idempotence_check:
+    description: "Whether the idempotence check should run or not"
+    default: 'true'
+    required: false
 
 runs:
   using: "composite"
@@ -47,3 +51,4 @@ runs:
       shell: bash
       env:
         ANSIBLE_FORCE_COLOR: '1'
+      if: inputs.run_idempotence_check == 'true'
