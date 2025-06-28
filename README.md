@@ -17,6 +17,7 @@ The **Playbook-test action** runs a playbook passed as a parameter to the templa
 | `ansible_cfg_path`  | The ansible.cfg file path                       | ✅       | `""`    |
 | `inventory_path`    | The inventory file path                         | ✅       | `""`    |
 | `config_path`       | The config.yml file path                        | ✅       | `""`    |
+| `run_idempotence_check`       | Whether the idempotence check should run or not      | ❌       | `"true"`    |
 
 #### **Jobs**
 
@@ -37,6 +38,7 @@ jobs:
       ansible_cfg_path: "./ansible.cfg"
       inventory_path: "./inventory.ini"
       config_path: "./config.yml"
+      run_idempotence_check: "true"
 ```
 
 ### 2. Start-ssh-server action (`start-ssh-server/action.yml`)
