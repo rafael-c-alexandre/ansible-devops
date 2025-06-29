@@ -19,7 +19,7 @@ The **Playbook-test action** runs a playbook passed as a parameter to the templa
 | `config_path`       | The config.yml file path                        | ✅       | `""`    |
 | `run_idempotence_check`       | Whether the idempotence check should run or not      | ❌       | `"true"`    |
 
-#### **Jobs**
+#### **Steps**
 
 - **Set up environment**: Copies all the config file to a common location.
 - **Check playbook syntax**: Tests the playbook syntax.
@@ -51,7 +51,7 @@ The **Start-ssh-server action** installs starts up an ssh server and checks if i
 | `ssh_private_key_path`| The SSH private key file path                 | ✅       | `""`   |
 | `ssh_public_key_path` | The SSH public key file path                  | ✅       | `""`    |
 
-#### **Jobs**
+#### **Steps**
 
 - **Install OpenSSH**: Install OpenSSH service and its dependencies.
 - **Start SSH server**: Starts an SSH server.
@@ -68,6 +68,38 @@ jobs:
       with:
         ssh_private_key_path: "./keys/ci"
         ssh_public_key_path: "./keys/ci.pub"
+```
+
+### 3. Release-docker-image (`release-docker-image/action.yml`)
+
+The **Release-docker-image action** builds and publishes a specific docker image to Docker Hub.
+
+#### **Inputs**
+| Name                | Description                                     | Required | Default |
+|---------------------|-------------------------------------------------|----------|---------|
+| `docker_image_name`| The docker image name                 | ✅       | `""`   |
+| `docker_username` | The username to login to Docker Hub                 | ✅       | `""`    |
+| `docker_password` | The password to login to Docker Hub                  | ✅       | `""`    |
+| `dockerfile_context` | Path where the dockerfile being built is located             | ✅       | `""`    |
+
+#### **Steps**
+
+- **Log in to Docker Hub**: Logs in to Docker Hub using the provided credentials.
+- **Setup Docker Buildx**: Sets up Buildx.
+- **Build and publish image**: Builds and publishes the intended docker image.
+
+#### **Usage**
+
+To use this workflow in another repository:
+```yaml
+jobs:
+  test:
+    uses: rafael-c-alexandre/ansible-devops/.github/actions/start-ssh-server@main
+    with:
+      docker_image_name: speedtest-exporter
+      docker_username: ${{ vars.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PAT }}
+      dockerfile_context: ./observability/exporters/speedtest
 ```
 
 Workflows
