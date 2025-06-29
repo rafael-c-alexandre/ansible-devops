@@ -85,6 +85,7 @@ The **Release-docker-image action** builds and publishes a specific docker image
 #### **Steps**
 
 - **Log in to Docker Hub**: Logs in to Docker Hub using the provided credentials.
+- **Setup Docker Buildx**: Sets up QEMU acceleration.
 - **Setup Docker Buildx**: Sets up Buildx.
 - **Build and publish image**: Builds and publishes the intended docker image.
 
