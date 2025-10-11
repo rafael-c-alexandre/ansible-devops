@@ -32,6 +32,8 @@ runs:
         cat "${{ inputs.ssh_private_key_path }}" > ~/.ssh/id_rsa
         cat "${{ inputs.ssh_public_key_path }}" > ~/.ssh/authorized_keys
         chmod 600 ~/.ssh/id_rsa ~/.ssh/authorized_keys
+        chmod 700 ~/.ssh
+        chmod 755 ~
       shell: bash
 
     - name: Test SSH connection.
